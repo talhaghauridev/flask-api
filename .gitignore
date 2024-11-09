@@ -110,7 +110,7 @@ venv.bak/
 
 # mkdocs documentation
 /site
-
+.flaskenv
 # mypy
 .mypy_cache/
 .dmypy.json
@@ -125,3 +125,4 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+.vercel
