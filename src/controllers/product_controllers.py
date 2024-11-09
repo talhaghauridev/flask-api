@@ -2,17 +2,17 @@
 from flask import Blueprint, jsonify
 
 # Create blueprint instance
-product_bp = Blueprint('products', __name__,)
+products = Blueprint('products', __name__,)
 
-@product_bp.route("/products")
-def products():
+@products.route("/")
+def products_fun():
     return jsonify({
         "name": "Product",
         "route": "Product route"
     })
 
 # You can add more product routes here
-@product_bp.route("/products/<int:id>")
+@products.route("/<int:id>")
 def get_product(id):
     return jsonify({
         "id": id,
