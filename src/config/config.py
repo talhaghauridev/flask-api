@@ -6,7 +6,7 @@ load_dotenv()
 
 class Config:
     # Flask Config
-    SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
+    SECRET_KEY = os.getenv('SECRET_KEY', 'l23@+="::##((&&)23432!@)')
     DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
     
     # Common Database Config
@@ -16,13 +16,13 @@ class DevelopmentConfig(Config):
     DEBUG = True
     DEVELOPMENT = True
     # SQLite for development
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///development.db'
+    SQLALCHEMY_DATABASE_URI = os.getenv("POSSGRESS_URL")
 
 class ProductionConfig(Config):
     DEBUG = False
     DEVELOPMENT = False
     # PostgreSQL for production
-    SQLALCHEMY_DATABASE_URI = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+    SQLALCHEMY_DATABASE_URI = os.getenv("POSSGRESS_URL")
 
 class TestingConfig(Config):
     TESTING = True

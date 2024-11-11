@@ -11,4 +11,4 @@ app = create_app()
 
 if __name__ == '__main__':
     print("App run in production")
-    app.run(debug=False)
+    app.run(debug=app.config("DEBUG"))

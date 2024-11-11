@@ -1,26 +1,57 @@
-class APIError(Exception):
-    """Base API Error"""
-    def __init__(self, message, status_code=400):
+from typing import Any, Optional, Dict
+
+class AppError(Exception):
+    """Single error class to handle all application errors"""
+    def __init__(
+        self, 
+        message: str,
+        status_code: int = 400,
+        error_type: str = "Error",
+        details: Optional[Dict] = None,
+        code: Optional[str] = None
+    ):
         super().__init__(message)
-        self.status_code = status_code
         self.message = message
+        self.status_code = status_code
+        self.error_type = error_type
+        self.details = details
+        self.code = code
 
-class ValidationError(APIError):
-    """Validation Error"""
-    def __init__(self, message):
-        super().__init__(message, status_code=400)
+    def to_dict(self) -> Dict:
+        """Convert error to dictionary format"""
+        error_dict = {
+            "success": False,
+            "status_code": self.status_code,
+            "error": {
+                "type": self.error_type,
+                "message": self.message
+            }
+        }
+        
+        if self.details:
+            error_dict["error"]["details"] = self.details
+            
+        if self.code:
+            error_dict["error"]["code"] = self.code
+            
+        return error_dict
 
-class NotFoundError(APIError):
-    """Not Found Error"""
-    def __init__(self, message="Resource not found"):
-        super().__init__(message, status_code=404)
+    @classmethod
+    def validation_error(cls, message: str, details: Optional[Dict] = None):
+        return cls(message, status_code=400, error_type="ValidationError", details=details)
 
-class AuthenticationError(APIError):
-    """Authentication Error"""
-    def __init__(self, message="Authentication required"):
-        super().__init__(message, status_code=401)
+    @classmethod
+    def not_found(cls, message: str = "Resource not found"):
+        return cls(message, status_code=404, error_type="NotFoundError")
 
-class AuthorizationError(APIError):
-    """Authorization Error"""
-    def __init__(self, message="Not authorized"):
-        super().__init__(message, status_code=403)
+    @classmethod
+    def unauthorized(cls, message: str = "Unauthorized"):
+        return cls(message, status_code=401, error_type="UnauthorizedError")
+
+    @classmethod
+    def forbidden(cls, message: str = "Forbidden"):
+        return cls(message, status_code=403, error_type="ForbiddenError")
+
+    @classmethod
+    def database_error(cls, message: str = "Database error"):
+        return cls(message, status_code=500, error_type="DatabaseError")

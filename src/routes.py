@@ -1,6 +1,6 @@
 from flask import Blueprint
-from .controllers.user_controllers import users
-from .controllers.product_controllers import products
+from src.controllers.user_controllers import users
+from src.controllers.product_controllers import products
 
 api = Blueprint('api', __name__)
 
